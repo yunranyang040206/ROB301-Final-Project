@@ -1,3 +1,18 @@
-# ROB301-Final-Project
+# ROB301 Final Project – TurtleBot3 Localization & Control Node
 
-This project aims to design and implement a control system that enables a TurtleBot 3 Waffle Pi robot to perform a mail delivery task along a closed-loop hallway route autonomously. A central challenge arises from the environment where the hallway includes eleven office locations marked by four repeating floor colors. Offices with identical visual appearances introduce inherent ambiguity, which prevents the robot from relying solely on raw sensor readings to operate properly. To solve this challenge, and because the task aligns with a discrete topological state space, our system integrates camera-based color detection and line tracking with a Bayesian localization framework to incrementally update the robot’s belief distribution using its transition and observation models. This estimator is further combined with a robust line-following controller and a navigation mechanism that detects office boundaries, selects the correct delivery locations, and executes the required 90-degree turn-and-pause behavior to simulate mail drop-off. The overall design enabled the robot to start from any arbitrary location, resolve uncertainty through repeated observations, and reliably navigate to any sequence of assigned offices, demonstrating a complete end-to-end autonomous mail delivery solution.
+This repository contains the Python ROS node developed for the ROB301 Final Design Project at the University of Toronto. The node enables a TurtleBot3 Waffle Pi to follow the hallway tape, detect office colors, localize itself on an 11-office loop, and perform the required mail-delivery routine.
+
+## Overview
+- **PID Line Following:** Uses `/line_idx` to track the white tape with proportional, integral, and derivative control, including deadband, hysteresis, anti-windup, and derivative filtering.
+- **Bayesian Localization:** Maintains a probability distribution over hallway states and updates it using the project’s transition and measurement models to estimate the robot’s location.
+- **Delivery Routine:** When the estimated state matches a target office with sufficient confidence, the robot performs a scripted delivery motion before resuming line following.
+
+## File Structure
+final_project.py # Main ROS node (PID control, localization, delivery)
+
+
+## Usage
+This node is intended to run in the course-provided TurtleBot3 ROS environment.  
+Run using:
+```bash
+rosrun final_project final_project.py
